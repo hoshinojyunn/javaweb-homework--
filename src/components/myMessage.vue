@@ -4,7 +4,7 @@
       好友消息<img src="../assets/friendMessageLogo.png">
       <el-table
         :data="friends"
-        style="width: 100%">
+        style="width: 100%;overflow-y: scroll;" height="710">
         <el-table-column prop="id" label="好友ID" width="120">
         </el-table-column>
         <el-table-column prop="username" label="好友名称" width="120">
@@ -41,7 +41,7 @@
       群组消息<img src="../assets/groupMessageLogo.png">
       <el-table
         :data="groups"
-        style="width: 100%">
+        style="width: 100%;overflow-y: scroll;" height="710">
         <el-table-column prop="groupId" label="群组ID" width="120">
         </el-table-column>
         <el-table-column prop="groupName" label="群组名称" width="120">
@@ -214,25 +214,6 @@ methods:{
       background-color: #f2f2f2;
   }
 
-  .Groups{
-      float: left;
-      width: 600px;
-      height: 40px;
-      text-align: left;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-      margin-bottom: 5px;
-      font-size: 25px;
-  }
-  .Friends{
-      float: left;
-      width: 600px;
-      height: 40px;
-      text-align: left;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-      margin-bottom: 5px;
-      font-size: 25px;
-  }
-
 
   .myMessage>div{
     float: left;
@@ -246,15 +227,5 @@ methods:{
   .groupMessage img{
     vertical-align: middle;
   }
-  .groupMessage{
-    overflow-y: scroll;
-  }
-  .friendMessage{
-    overflow-y: scroll;
-  }
-  .detail{
-    float: right;
-    margin-right: 5px;
-    
-  }
+
 </style>

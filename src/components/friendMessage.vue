@@ -4,7 +4,7 @@
     </el-page-header>
     <el-table
       :data="friendMessage"
-      style="width: 100%;overflow: scroll;" class="table">
+      style="width: 100%;" class="table">
       <el-table-column
         prop="createDate"
         label="消息发送时间"

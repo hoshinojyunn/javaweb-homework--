@@ -4,7 +4,7 @@
         <div class="top"><img src="../assets/friendLogo.png">我的好友&nbsp&nbsp<i class="el-icon-plus" style="vertical-align: middle;"></i><a href="#" @click="addfriend" class="al">添加好友</a></div>
         <el-table
           :data="friends"
-          style="width: 100%;overflow-y: scroll;" class="table">
+          style="width: 100%;overflow-y: scroll;" class="table" height="721">
           <el-table-column
             prop="id"
             label="好友ID"
@@ -33,7 +33,7 @@
 
         <el-table
           :data="groups"
-          style="width: 100%;overflow-y: scroll;" class="table">
+          style="width: 100%;overflow-y: scroll;" class="table" height="721">
           <el-table-column
             prop="groupId"
             label="群组ID"

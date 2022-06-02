@@ -18,7 +18,7 @@
           </el-form-item>
           <el-form-item style="margin: 0 auto">
             <el-col :span="16">
-              <el-button type="primary" @click="onSubmit" class="submit" v-model:loading="logging">登录</el-button>
+              <el-button type="primary" @click="onSubmit" class="submit" :loading="logging">登录</el-button>
               <el-button @click="register">注册</el-button>
             </el-col>
           </el-form-item>
@@ -66,6 +66,7 @@ import Footer from './footer/footer.vue';
 Vue.use(VueAxios,axios);
 export default {
     name: "Login",
+    inject: ['reload'],
     data() {
         return {
             username: null,
@@ -86,6 +87,7 @@ export default {
                     password: this.password
                 }
             }).then(response => {
+                this.logging = false;
                 this.loginState = response.data;
                 console.log(this.loginState);
                 if (this.loginState != null) {
@@ -95,6 +97,7 @@ export default {
                 else {
                     this.loggin = false;
                     this.$message.error('账号或密码错误');
+                    this.fresh();
                 }
             }).catch(err => {
                 console.log(err);
@@ -102,6 +105,9 @@ export default {
         },
         register(){
           VueRouter.push('/register');
+        },
+        fresh(){
+          this.reload();
         }
     },
     components: { Header, Footer }

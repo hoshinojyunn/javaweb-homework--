@@ -4,7 +4,7 @@
     </el-page-header>
     <el-table
       :data="groupMessage"
-      style="width: 100%;overflow: scroll;" class="table" height="721"> 
+      style="width: 100%;" class="table" height="721"> 
       <el-table-column
         prop="groupEventId"
         label="事件编号"

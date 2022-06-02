@@ -33,7 +33,7 @@
     </div>
     <el-table
       :data="eventsData"
-      style="width: 100%;overflow-y: scroll;" class="events" height="721">
+      style="width: 100%;" class="events" height="721">
         <el-table-column
             prop="eventId"
             label="事件ID"
@@ -218,11 +218,5 @@ methods:{
         height: 781px;
         background-color: #f2f2f2;
     }
-    /* .events{
-        float: left;
-        width: 175px;
-        border-right: 0.1px solid #000;
-        font-size: 20px;
-        line-height: 60px;
-    } */
+
 </style>
