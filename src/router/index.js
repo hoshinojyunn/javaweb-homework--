@@ -21,6 +21,7 @@ import personalSetting from '../components/personalSetting';
 import securitySetting from '../components/securitySetting';
 Vue.use(VueAxios,axios);
 export default new VueRouter({
+  mode: 'history',
   routes: [
     {
       path: "/main",
