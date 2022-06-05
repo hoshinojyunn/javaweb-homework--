@@ -1,3 +1,6 @@
+<!-- 
+  
+-->
 <template>
   <div>
     <Header></Header>
@@ -102,6 +105,11 @@ export default {
             }).catch(err => {
                 console.log(err);
             });
+            axios.get('http://localhost:8080/getAvatar').then(response=>{
+              var avatar = 'http://localhost:8080/avatar/'+response.data;
+              window.sessionStorage.setItem('avatar',avatar);
+              console.log(avatar);
+            }); 
         },
         register(){
           VueRouter.push('/register');

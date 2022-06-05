@@ -14,6 +14,22 @@
       <el-menu-item index="myFriend" style="float: right;margin-right: 30px;">我的好友</el-menu-item>
       <el-menu-item index="myMessage" style="float: right;margin-right: 30px;">我的消息</el-menu-item>
       <el-menu-item index="myEvent" style="margin-right: 30px;float:right">我的事件</el-menu-item>
+      <!-- <div style="float: right;box-shadow: 0px 2px 16px -4px black;border-radius: 4px;margin-right: 30px;margin-top:10px;height: 40px;width: 40px;">
+        <img :v-model="this.circleUrl" :src="circleUrl" style="width:100%;height:100%"/>
+      </div> -->
+      <el-popover
+        placement="bottom"
+        width="150"
+        trigger="hover">
+        <!-- <el-bottom @click="toPersonalSetting">个人信息</el-bottom><br><br>
+        <el-bottom @click="logout">退出</el-bottom> -->
+        <el-link type="primary" @click="toPersonalSetting">个人信息</el-link><br><br>
+        <el-link type="primary" @click="logout">退出</el-link>
+        <div slot="reference" style="float: right;box-shadow: 0px 2px 16px -4px black;border-radius: 4px;margin-right: 30px;margin-top:10px;height: 40px;width: 40px;">
+          <img :v-model="this.circleUrl" :src="circleUrl" style="width:100%;height:100%"/>
+        </div>
+      </el-popover>
+      <!-- <el-avatar fit="scale-down" shape="square" :size="45" :v-model="this.circleUrl" :src="circleUrl" style="float: right;margin-right: 30px;margin-top:8px"></el-avatar> -->
     </el-menu>
   </div>
 
@@ -28,10 +44,14 @@ Vue.use(VueAxios,axios);
 export default {
   name: "Profile",
   created: function(){
-    let userName = JSON.parse(window.sessionStorage.getItem("username"));
+    let userName = window.sessionStorage.getItem("username");
     console.log(userName);
     if(userName){
       this.username = '欢迎，'+userName;
+    }
+    let avatar = window.sessionStorage.getItem('avatar');
+    if(avatar){
+      this.circleUrl = avatar;
     }
   },
   methods: {
@@ -43,6 +63,7 @@ export default {
             type: 'success'
           });
           window.sessionStorage.removeItem("username");
+          window.sessionStorage.removeItem("avatar");
         }else{
           this.$message.error('您还没登录');
         }
@@ -77,12 +98,16 @@ export default {
             VueRouter.push('/main');
             break;
         }
+    },
+    toPersonalSetting: function(){
+      VueRouter.push('/personalSetting');
     }
   },
   data(){
     return {
       activeIndex: 'myEvent',
-      username : ''
+      username : '',
+      circleUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
     }
   }
 }
