@@ -1,70 +1,89 @@
 <template>
   <div class="groupsBody">
-      <div>
-          <el-page-header @back="goBack" content="管理群组" style="margin-bottom: 5px;margin-top: 5px;">
-          </el-page-header>
-          <el-table
-            :data="groups"
-            style="width: 100%;overflow-y: scroll;" class="groups" height="747">
-                <el-table-column
-                    prop="groupId"
-                    label="群组ID"
-                    width="180">
-                </el-table-column>
-                <el-table-column
-                    prop="groupName"
-                    label="群组名称"
-                    width="180">
-                </el-table-column>
-                <el-table-column fixed="right" label="操作" width="150">
-                    <template slot-scope="scope">
-                        <i class="el-icon-remove"></i>
-                        <el-button @click="setLeaveGroupId(scope.row.groupId,scope.row.groupName)" type="text" size="small">退出</el-button>
-                        <i class="el-icon-edit"></i>
-                        <el-button @click="setSendGroupId(scope.row.groupId,scope.row.groupName)" type="text" size="small">发布消息</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-          <el-dialog
-            :title="'离开 '+leaveGroupName"
-            :visible.sync="deleteVisible"
-            width="30%"
-            center>
-            <span>确定退出该群组吗？</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="deleteVisible = false">取 消</el-button>
-                <el-button type="primary" @click="leaveGroup(leaveGroupId)">确 定</el-button>
-            </span>
-        </el-dialog>
-
+    <el-page-header @back="goBack" content="管理群组" style="margin-bottom: 5px;margin-top: 5px;">
+    </el-page-header>
+    <div style="height: 60px">
+        <el-button type="primary" style="float: left;margin:10px" icon="el-icon-edit" @click="createVisible = true">创建群组</el-button>
         <el-dialog
-            :title="'向群组 '+sendGroupName+' 发消息'"
-            :visible.sync="sendGroupMessageVisible"
-            width="30%"
-            center>
-            <el-form ref="form" :model="form" label-width="80px">
-                <el-form-item label="消息title">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="事件时间">
-                    <el-col :span="11">
-                    <el-date-picker type="date" placeholder="选择开始时间" v-model="form.date1" style="width: 100%;"></el-date-picker>
-                    </el-col>
-                    <el-col class="line" :span="2">-</el-col>
-                    <el-col :span="11">
-                    <el-date-picker placeholder="选择截止时间" v-model="form.date2" style="width: 100%;"></el-date-picker>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="消息描述">
-                    <el-input type="textarea" v-model="form.desc"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="sendGroupMessageVisible = false">取 消</el-button>
-                <el-button type="primary" @click="sendGroupMessage(sendGroupId)">确 定</el-button>
-            </span>
-        </el-dialog>
-      </div>
+        title="创建群组"
+        :visible.sync="createVisible"
+        width="30%"
+        center>
+        <el-form ref="createForm" :model="createForm" label-width="80px">
+            <el-form-item label="群组名称">
+                <el-input v-model="createForm.name"></el-input>
+            </el-form-item>
+            
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="createVisible = false">取 消</el-button>
+            <el-button type="primary" @click="createGroup()">确 定</el-button>
+        </span>
+    </el-dialog>
+    </div>
+        <div>
+        <el-table
+        :data="groups"
+        style="width: 100%;overflow-y: scroll;" class="groups" height="686">
+            <el-table-column
+                prop="groupId"
+                label="群组ID"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="groupName"
+                label="群组名称"
+                width="180">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="150">
+                <template slot-scope="scope">
+                    <i class="el-icon-remove"></i>
+                    <el-button @click="setLeaveGroupId(scope.row.groupId,scope.row.groupName)" type="text" size="small">退出</el-button>
+                    <i class="el-icon-edit"></i>
+                    <el-button @click="setSendGroupId(scope.row.groupId,scope.row.groupName)" type="text" size="small">发布消息</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-dialog
+        :title="'离开 '+leaveGroupName"
+        :visible.sync="deleteVisible"
+        width="30%"
+        center>
+        <span>确定退出该群组吗？</span>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="deleteVisible = false">取 消</el-button>
+            <el-button type="primary" @click="leaveGroup(leaveGroupId)">确 定</el-button>
+        </span>
+    </el-dialog>
+
+    <el-dialog
+        :title="'向群组 '+sendGroupName+' 发消息'"
+        :visible.sync="sendGroupMessageVisible"
+        width="30%"
+        center>
+        <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item label="消息title">
+                <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="事件时间">
+                <el-col :span="11">
+                <el-date-picker type="date" placeholder="选择开始时间" v-model="form.date1" style="width: 100%;"></el-date-picker>
+                </el-col>
+                <el-col class="line" :span="2">-</el-col>
+                <el-col :span="11">
+                <el-date-picker placeholder="选择截止时间" v-model="form.date2" style="width: 100%;"></el-date-picker>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="消息描述">
+                <el-input type="textarea" v-model="form.desc"></el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="sendGroupMessageVisible = false">取 消</el-button>
+            <el-button type="primary" @click="sendGroupMessage(sendGroupId)">确 定</el-button>
+        </span>
+    </el-dialog>
+    </div>
         
   </div>
 </template>
@@ -84,7 +103,6 @@ export default {
             return a.groupId-b.groupId;
           });
         });
-        
     },
 data(){
 return{
@@ -104,7 +122,11 @@ return{
           desc: ''
     },
     sendGroupName: '',
-    leaveGroupName: ''
+    leaveGroupName: '',
+    createVisible: false,
+    createForm: {
+        name: '' 
+    }
 }
 },
 create(){
@@ -189,6 +211,29 @@ methods:{
     },
     goBack: function(){
         VueRouter.push('/setting');
+    },
+    createGroup: function(){
+        this.createVisible = false;
+        axios.get('http://localhost:8080/createGroup',{
+            params: {
+                groupName: this.createForm.name
+            }
+        }).then(response=>{
+            if(response.data==true){
+                this.$notify({
+                    title: '成功',
+                    message: '创建成功',
+                    type: 'success'
+                });
+            }else{
+                this.$notify.error({
+                    title: '错误',
+                    message: '创建失败'
+                });
+            }
+            this.fresh();
+        })
+
     },
     fresh(){
         this.reload();

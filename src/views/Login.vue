@@ -90,26 +90,29 @@ export default {
                     password: this.password
                 }
             }).then(response => {
+                axios.get('http://localhost:8080/getAvatar').then(response=>{
+                  var avatar = 'http://localhost:8080/avatar/'+response.data;
+                  window.sessionStorage.setItem('avatar',avatar);
+                  console.log(avatar);
+                  VueRouter.push("/main");
+                });
                 this.logging = false;
                 this.loginState = response.data;
-                console.log(this.loginState);
                 if (this.loginState != null) {
                     window.sessionStorage.setItem("username",JSON.stringify(response.data.username));
-                    VueRouter.push("/main");
+                    window.sessionStorage.setItem("id",JSON.stringify(response.data.id));
+                    
                 }
                 else {
                     this.loggin = false;
                     this.$message.error('账号或密码错误');
                     this.fresh();
                 }
+                console.log(response.data);
             }).catch(err => {
                 console.log(err);
             });
-            axios.get('http://localhost:8080/getAvatar').then(response=>{
-              var avatar = 'http://localhost:8080/avatar/'+response.data;
-              window.sessionStorage.setItem('avatar',avatar);
-              console.log(avatar);
-            }); 
+             
         },
         register(){
           VueRouter.push('/register');

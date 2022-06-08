@@ -21,8 +21,7 @@
         placement="bottom"
         width="150"
         trigger="hover">
-        <!-- <el-bottom @click="toPersonalSetting">个人信息</el-bottom><br><br>
-        <el-bottom @click="logout">退出</el-bottom> -->
+        <div>你的ID：{{this.id}}</div><br>
         <el-link type="primary" @click="toPersonalSetting">个人信息</el-link><br><br>
         <el-link type="primary" @click="logout">退出</el-link>
         <div slot="reference" style="float: right;box-shadow: 0px 2px 16px -4px black;border-radius: 4px;margin-right: 30px;margin-top:10px;height: 40px;width: 40px;">
@@ -49,9 +48,14 @@ export default {
     if(userName){
       this.username = '欢迎，'+userName;
     }
+    this.id = window.sessionStorage.getItem('id');
     let avatar = window.sessionStorage.getItem('avatar');
     if(avatar){
       this.circleUrl = avatar;
+    }else{
+      axios.get('http://localhost:8080/getAvatar').then(response=>{
+        this.circleUrl = 'http://localhost:8080/avatar/'+response.data;
+      });
     }
   },
   methods: {
@@ -64,6 +68,7 @@ export default {
           });
           window.sessionStorage.removeItem("username");
           window.sessionStorage.removeItem("avatar");
+          window.sessionStorage.removeItem("id");
         }else{
           this.$message.error('您还没登录');
         }
@@ -107,7 +112,8 @@ export default {
     return {
       activeIndex: 'myEvent',
       username : '',
-      circleUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
+      circleUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+      id: null
     }
   }
 }

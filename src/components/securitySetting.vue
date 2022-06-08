@@ -154,6 +154,9 @@ methods:{
                           message: "密码重置成功，请重新登录",
                           type: "success"
                       });
+                      window.sessionStorage.removeItem("username");
+                      window.sessionStorage.removeItem("avatar");
+                      window.sessionStorage.removeItem("id");
                       VueRouter.push("/login");
                   }
                   else {

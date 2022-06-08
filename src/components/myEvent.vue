@@ -1,7 +1,7 @@
 <template>
   <div class='myevent'>
     <div style="height: 60px">
-        <el-button type="primary" style="float: left;margin:10px" @click="visible = true">创建事件</el-button>
+        <el-button type="primary" style="float: left;margin:10px" icon="el-icon-edit" @click="visible = true">创建事件</el-button>
         <el-dialog
         title="创建事件"
         :visible.sync="visible"
@@ -54,15 +54,45 @@
             label="结束时间"
             width="180">
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="150">
+        <el-table-column fixed="right" label="操作" width="210">
             <template slot-scope="scope">
+                <i class="el-icon-message-solid"></i>
+                <el-button @click="pushEvent(scope.row.eventId)" type="text" size="small">推送</el-button>
                 <i class="el-icon-tickets"></i>
                 <el-button @click="detailAboat(scope.row.eventId)" type="text" size="small">查看详细</el-button>
                 <i class="el-icon-delete"></i>
                 <el-button @click="deleteEvent(scope.row.eventId)" type="text" size="small">删除</el-button>
+                
             </template>
         </el-table-column>
     </el-table>
+    <el-dialog
+        title="推送事件"
+        :visible.sync="pushVisible"
+        width="60%">
+        <el-table
+          :data="friends"
+          style="width: 100%;overflow-y: scroll;" class="table" height="300">
+          <el-table-column
+            prop="id"
+            label="好友ID"
+            width="420">
+          </el-table-column>
+          <el-table-column
+            prop="username"
+            label="好友名字"
+            width="180">
+          </el-table-column>
+          <el-table-column fixed="right" label="操作" width="150">
+            <template slot-scope="scope">
+                <el-button @click="push(scope.row.id)" type="text" size="small">推送</el-button>
+            </template>
+           </el-table-column>
+        </el-table>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="pushVisible = false">取消</el-button>
+        </span>
+    </el-dialog>
     <el-dialog
         title="详细信息"
         :visible.sync="detailVisible"
@@ -104,6 +134,7 @@ data(){
 return{
     eventsData: null,
     item: null,
+    friends: null,
     form: {
         title: null,
         desc: null,
@@ -113,7 +144,9 @@ return{
     visible: false,
     detailVisible: false,
     detailId: null,
-    detailMessage: null
+    detailMessage: null,
+    pushVisible: false,
+    pushEventId: null
 }
 },
 create(){
@@ -202,6 +235,41 @@ methods:{
         }
         this.detailMessage = this.eventsData[index].eventDescription;
         console.log(this.detailMessage);
+    },
+    pushEvent(eventId){
+        this.pushEventId = eventId;
+        axios.get('http://localhost:8080/getFriends').then(response=>{
+          this.friends = response.data;
+          this.pushVisible = true;
+        });
+    },
+    push(friendId){
+        var targetEvent = null;
+        for(let i =0;i<this.eventsData.length;++i){
+            if(this.eventsData[i].eventId === this.pushEventId){
+                targetEvent = this.eventsData[i];
+                break;
+            }
+        }
+        axios.get('http://localhost:8080/sendFriendEvent',{
+            params: {
+                friendId: friendId,
+                eventName: targetEvent.eventName,
+                startTime: targetEvent.startTime,
+                endTime: targetEvent.endTime,
+                eventDescription: targetEvent.eventDescription
+            }
+        }).then(response=>{
+            if(response.data==true){
+                this.$message({
+                    message: '推送成功',
+                    type: 'success'
+                });
+            }else{
+                this.$message.error('推送失败');
+            }
+        });
+        this.pushVisible = false;
     },
     fresh(){
         this.reload();

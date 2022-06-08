@@ -180,14 +180,14 @@ methods:{
         }).then(response=>{
             console.log(response.data);
             if(response.data==true){
-                const h = this.$createElement;
                 this.$notify({
-                    title: '发布群组消息',
-                    message: h('i', { style: 'color: teal'}, '已成功发布')
+                    title: '成功',
+                    message: '发布成功',
+                    type: 'success'
                 });
             }else{
                 const h = this.$createElement;
-                this.$notify({
+                this.$notify.error({
                     title: '发布群组消息',
                     message: h('i', { style: 'color: teal'}, '发生错误，发布失败')
                 });

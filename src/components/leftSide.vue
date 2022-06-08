@@ -32,7 +32,13 @@ Vue.use(VueAxios,axios);
 export default {
     name: "leftSide",
     created: function(){
-        this.avatar = window.sessionStorage.getItem('avatar'); 
+        this.avatar = window.sessionStorage.getItem('avatar');
+        if(this.avatar==null){
+            axios.get('http://localhost:8080/getAvatar').then(response=>{
+                this.avatar = 'http://localhost:8080/avatar/'+response.data;
+                console.log(this.avatar);
+            });
+        } 
     },
 data(){
 return{
